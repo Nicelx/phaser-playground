@@ -11,6 +11,12 @@ export const movingTileset = () => {
 		width: 1280,
 		height: 720,
 		backgroundColor: "#5DACD8",
+		physics: {
+			default: 'arcade',
+			arcade: {
+				debug: true
+			}
+		},
 		scene: {
 			init: initScene,
 			preload: preloadScene,
@@ -22,6 +28,7 @@ export const movingTileset = () => {
 	const game = new Phaser.Game(phaserConfig);
 
 	let sky, wizard, cursors, plane;
+	let isGameOver = false;
 
 	function initScene() {}
 	function preloadScene() {
@@ -74,13 +81,30 @@ export const movingTileset = () => {
 		})
 
 		console.log(this);
-		plane = this.add.sprite(222, 222, "plane");
+		plane = this.physics.add.sprite(222, 222, "plane");
 		plane.setScale(0.2);
+		plane.setCircle(200);
 		plane.play("fly");
 
-		wizard = this.add.sprite(500, 360, "wizard");
+		wizard = this.physics.add.sprite(500, 360, "wizard");
+		wizard.setScale(0.2);
 		wizard.play('idle')
-		
+
+		console.log(wizard.alpha)
+		wizard.angle = -90
+		console.log(wizard.anims)
+		console.log(plane.blendMode = 4)
+
+		this.physics.add.collider(plane, wizard, function (plane, wizard) {
+			if (!isGameOver) {
+				plane.play("explode");
+				plane.once(Phaser.Animations.Events.SPRITE_ANIMATION_COMPLETE, () => {
+					plane.destroy();
+				});
+				isGameOver = true;
+			}
+		});
+
 		// destroing by timer
 		// this.time.addEvent({
 		// 	delay: 3000,
@@ -96,6 +120,8 @@ export const movingTileset = () => {
 	}
 	function updateScene() {
 		sky.tilePositionX += 0.3;
+
+		// wizard.x -=4;
 
 		if (cursors.left.isDown) {
 			console.log(plane);
