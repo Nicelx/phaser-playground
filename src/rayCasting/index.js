@@ -18,10 +18,11 @@ let gameOptions = {
 	}
 }
 window.onload = function() {
+	// console.log(Phaser);
     let gameConfig = {
         type: Phaser.AUTO,
         scale: {
-            // mode: Phaser.Scale.FIT,
+            // mode: Phaser.Scale.CENTER_BOTH,
             // autoCenter: Phaser.Scale.CENTER_BOTH,
             parent: "thegame",
             width: 640,
@@ -37,6 +38,7 @@ class playGame extends Phaser.Scene{
     }
     create(){
 
+		console.log(this)
 		// graphic object used to draw walls
 		this.wallGraphics = this.add.graphics();
 		this.wallGraphics.lineStyle(1, 0x00ff00);
@@ -104,6 +106,7 @@ class playGame extends Phaser.Scene{
 
 		// determine light polygon starting from pointer coordinates
 		let visibility = this.createLightPolygon(pointer.x, pointer.y);
+		// console.log(visibility);
 
 		// clear and prepare lightGraphics graphic object
 		this.lightGraphics.clear();
@@ -132,6 +135,7 @@ class playGame extends Phaser.Scene{
 	// method to create light polygon using visibility_polygon.js
 	createLightPolygon(x, y){
 		let segments = VisibilityPolygon.convertToSegments(this.polygons);
+		console.log(segments)
 		segments = VisibilityPolygon.breakIntersections(segments);
 		let position = [x, y];
 		if (VisibilityPolygon.inPolygon(position, this.polygons[this.polygons.length - 1])) {
