@@ -12,7 +12,6 @@ class Menu extends Phaser.Scene {
 	}
 
 	create() {
-		console.log(this.CONFIG);
 		this.text = this.add.text(this.CONFIG.centerX,this.CONFIG.centerY,'Menu')
 		.setColor('#000')
 		.setOrigin(0.5);

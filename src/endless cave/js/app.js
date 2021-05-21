@@ -22,7 +22,7 @@ App.prototype.start = function() {
 		height: 640/2,
 		scene : scenes,
 		pixelArt: true,
-		backgroundColor : 0xFFFFFF
+		backgroundColor : '0xF4CCA1'
 	}
 
 	let game = new Phaser.Game(config);
