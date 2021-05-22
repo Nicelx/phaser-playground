@@ -9,6 +9,11 @@ class Preload extends Phaser.Scene {
 	}
 
 	preload() {
+
+		this.bg = this.add.graphics({x:0, y:0})
+		this.bg.fillStyle('0xF4CCA1', 1);
+		this.bg.fillRect(0,0,this.CONFIG.width, this.CONFIG.height)
+
 		this.createLoadingBar();
 		// this.load.setPath("../assets/");
 		this.load.setPath("assets/img/");
@@ -65,14 +70,14 @@ class Preload extends Phaser.Scene {
 
 	onProgress(val) {
 		let w = this.CONFIG.width - 2*this.progress.x;
-		let h = 18;
+		let h = 36;
 
 		this.progress.clear();
 		this.progress.fillStyle('0xFFFFFF', 1);
 		this.progress.fillRect(0,0,w * val, h);
 
 		this.border.clear();
-		this.border.lineStyle(2, '0x4D6592', 1);
+		this.border.lineStyle(4, '0x4D6592', 1);
 		this.border.strokeRect(0,0,w*val, h )
 
 		this.txt_progress.setText(Math.round(val*100) + '%');

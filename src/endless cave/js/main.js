@@ -1,7 +1,7 @@
 function resizeApp () {
 	'use strict';
 
-	let game_ratio = (360/2) / (640/2);
+	let game_ratio = 360 / 640;
 
 	let div = document.getElementById('phaser-app');
 	div.style.width = (window.innerHeight * game_ratio) + 'px';
