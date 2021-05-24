@@ -10,6 +10,8 @@ class Play extends Phaser.Scene {
 			floor:0
 		}
 
+		this.generator = new Generator(this)
+
 		this.allow_input = false;
 		this.is_pause = false;
 		this.is_gameover = false;
@@ -17,11 +19,13 @@ class Play extends Phaser.Scene {
 	}
 
 	create() {
-
+		this.generator.setup();
 	}
 
 	update() {
+		this.updateCamera();
 
+		this.generator.update();
 	}
 
 	updateCamera() {

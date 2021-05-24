@@ -17,6 +17,13 @@ class Preload extends Phaser.Scene {
 		this.createLoadingBar();
 		// this.load.setPath("../assets/");
 		this.load.setPath("assets/img/");
+		
+		this.load.spritesheet('tileset', 'tileset.png', {
+			frameWidth: 46,
+			frameHeight: 46,
+			endFrame: 4,
+		});
+		
 		this.load.spritesheet("spr-hero", "hero.png", {
 			frameWidth: 16,
 			frameHeight: 16,
@@ -24,6 +31,7 @@ class Preload extends Phaser.Scene {
 			margin: 1,
 			spacing: 2,
 		});
+		
 
 		// this.load.spritesheet("spr-slime", "spritesheet.png", );
 		// this.load.spritesheet("spr-spider", "spritesheet.png", );
