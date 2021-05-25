@@ -10,6 +10,7 @@ class Menu extends Phaser.Scene {
 	create() {
 		this.createBackground();
 
+
 		this.title = new Text(this, this.CONFIG.centerX, 75, "Endless Cave", "title");
 
 		this.text = new Text(
@@ -47,6 +48,6 @@ class Menu extends Phaser.Scene {
 	}
 
 	goPlay() {
-		this.scene.start("play");
+		this.scene.start("Play");
 	}
 }

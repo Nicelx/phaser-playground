@@ -37,6 +37,7 @@ App.prototype.start = function() {
 		centerX : Math.round(0.5 * config.width),
 		centerY : Math.round(0.5 * config.height),
 		tile: 32,
+		map_offset : 4
 	}
 
 	game.sound_on = true

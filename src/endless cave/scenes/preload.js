@@ -19,9 +19,10 @@ class Preload extends Phaser.Scene {
 		this.load.setPath("assets/img/");
 		
 		this.load.spritesheet('tileset', 'tileset.png', {
-			frameWidth: 46,
-			frameHeight: 46,
-			endFrame: 4,
+			frameWidth: 32,
+			frameHeight: 32,
+			startFrame: 0,
+			endFrame: 1
 		});
 		
 		this.load.spritesheet("spr-hero", "hero.png", {

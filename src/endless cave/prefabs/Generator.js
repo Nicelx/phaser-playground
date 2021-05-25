@@ -39,11 +39,13 @@ class Generator{
 			floor[ty] = [];
 
 			for (let tx = 0; tx < cols; tx++) {
-				x = (tx * this.CONFIG.tile);
+				x = (tx * this.CONFIG.tile )+ this.CONFIG.map_offset;
 				y = (ty * this.CONFIG.tile);
 				
+				
+
 				spr = this.ctx.add.sprite(x, y, 'tileset');
-				// spr = this.ctx.add.sprite(250, y, 'tileset');
+
 				spr.setOrigin(0);
 				spr.setDepth(this.DEPTH.floor);
 
@@ -55,14 +57,39 @@ class Generator{
 	}
 
 	scrollFloor() {
+		let offset = this.ctx.cameras.main.scrollY - this.layers.floor[0][0].y;
 
+		if (offset >= this.CONFIG.tile) {
+			this.destroyFloorRow()
+			this.appendFloorRow();
+		}
 	}
 
 	destroyFloorRow() {
+		for (let tx = 0; tx < this.layers.floor[0].length; tx++) {
+			this.layers.floor[0][tx].destroy();
+		}
 
+		this.layers.floor.splice(0,1);
 	}
 
 	appendFloorRow() {
+		let x;
+		let spr;
 
+		let ty = this.layers.floor.length;
+		let y = this.layers.floor[ty -1][0].y + this.CONFIG.tile;
+
+		this.layers.floor.push([])
+
+		for (let tx = 0; tx < this.cols; tx++) {
+			x = (tx * this.CONFIG.tile) + this.CONFIG.map_offset;
+
+			spr = this.ctx.add.sprite(x,y,'tileset');
+			spr.setOrigin(0);
+			spr.setDepth(this.DEPTH.floor);
+
+			this.layers.floor[ty][tx] = spr;
+		}		
 	}
 }

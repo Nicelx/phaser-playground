@@ -6,6 +6,7 @@ class Play extends Phaser.Scene {
 	init() {
 		this.CONFIG = this.sys.game.CONFIG;
 
+
 		this.DEPTH = {
 			floor:0
 		}
@@ -15,6 +16,12 @@ class Play extends Phaser.Scene {
 		this.allow_input = false;
 		this.is_pause = false;
 		this.is_gameover = false;
+
+		this.cam_speed = {
+			base : 1,
+			current: 1,
+			max: 1
+		}
 
 	}
 
@@ -29,10 +36,21 @@ class Play extends Phaser.Scene {
 	}
 
 	updateCamera() {
-
+		this.cameras.main.setScroll(0, this.cameras.main.scrollY + this.cam_speed.current)
 	}
 
-	setCamSpeed() {
-		
+	setCamSpeed(speed) {
+		this.cam_speed.base = speed;
+		this.cam_speed.current = speed;
+
+		this.cam_speed.current = Math.min(
+			this.cam_speed.current,
+			this.cam_speed.max)
+
+		this.cam_speed.current = Math.max(
+			this.cam_speed.current,
+			0
+		)
 	}
+
 }
