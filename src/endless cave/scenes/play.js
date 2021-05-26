@@ -27,12 +27,25 @@ class Play extends Phaser.Scene {
 
 	create() {
 		this.generator.setup();
+
+		this.createPlayer();
 	}
 
 	update() {
 		this.updateCamera();
 
 		this.generator.update();
+	}
+
+
+	createPlayer() {
+		this.player = new Player(
+			this,
+			this.CONFIG.centerX,
+			this.CONFIG.centerY,
+			'spr-hero'
+		)
+
 	}
 
 	updateCamera() {
