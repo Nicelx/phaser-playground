@@ -27,10 +27,7 @@ class Preload extends Phaser.Scene {
 		
 		this.load.spritesheet("spr-hero", "hero.png", {
 			frameWidth: 16,
-			frameHeight: 16,
-			endFrame: 4,
-			margin: 1,
-			spacing: 2,
+			frameHeight: 16
 		});
 		
 
@@ -39,6 +36,9 @@ class Preload extends Phaser.Scene {
 	}
 
 	create() {
+
+		this.createAllAnims();
+
 		this.time.addEvent({
 			delay: 1000,
 			callback: () => {this.scene.start("Menu");},
@@ -91,4 +91,34 @@ class Preload extends Phaser.Scene {
 
 		this.txt_progress.setText(Math.round(val*100) + '%');
 	}
+
+	createAllAnims() {
+		this.anims.create({
+			key: 'spr-hero-walk',
+			frames : this.anims.generateFrameNames('spr-hero', { 
+				frames: [0,1,0,2]	
+			}),
+			repeat: -1,
+			frameRate : 12
+		})
+
+		this.anims.create({
+			key: 'spr-slime-walk',
+			frames : this.anims.generateFrameNames('spr-slime', { 
+				frames: [0,1,0,2]	
+			}),
+			repeat: -1,
+			frameRate : 12
+		})
+
+		this.anims.create({
+			key: 'spr-spider-walk',
+			frames : this.anims.generateFrameNames('spr-spider', { 
+				frames: [0,1,0,2]	
+			}),
+			repeat: -1,
+			frameRate : 12
+		})
+	}
+
 }
