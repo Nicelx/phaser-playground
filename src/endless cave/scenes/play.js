@@ -50,14 +50,7 @@ class Play extends Phaser.Scene {
 
 		this.generator.update();
 
-		this.player.setSpritePos(this.player.x, this.player.y + this.cam_speed.current)
-
-		if (this.is_holding.direction === 'left') {
-			this.player.setSpritePos(this.player.x - 1, this.player.y)
-		}
-		else if (this.is_holding.direction === 'right') {
-			this.player.setSpritePos(this.player.x + 1, this.player.y)
-		}
+		this.player.update(this.is_holding.direction);
 	}
 
 
