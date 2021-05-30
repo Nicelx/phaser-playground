@@ -1,6 +1,12 @@
 class Player extends Entity {
 	constructor(ctx, x, y, key) {
 		super(ctx, x, y, key);
+
+		this.speed = {
+			base : 2,
+			current: 2,
+			max : 6,
+		}
 	}
 
 	update(is_holding) {
@@ -13,6 +19,16 @@ class Player extends Entity {
 			this.moveSprite();
 		}
 	}
+
+	startMoving() {
+		this.setState('walk');
+		this.startNewAnim('walk')
+	}
+	stopMoving() {
+		this.setState('idle');
+		this.startNewAnim('idle')
+	}
+
 	moveSprite() {
 		switch(this.direction.current) {
 			case 'down' :

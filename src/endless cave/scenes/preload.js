@@ -26,8 +26,6 @@ class Preload extends Phaser.Scene {
 		});
 		
 		this.load.spritesheet("spr-hero", "hero.png", {
-			start: 0,
-			endFrame: 1,
 			frameWidth: 16,
 			frameHeight: 16
 		});

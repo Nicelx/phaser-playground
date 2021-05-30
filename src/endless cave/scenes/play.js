@@ -64,12 +64,21 @@ class Play extends Phaser.Scene {
 
 		this.player.setDepth(this.DEPTH.player);
 
-		this.player.startNewAnim('walk')
+		this.player.startMoving();
 
 	}
 
 	updateCamera() {
 		this.cameras.main.setScroll(0, this.cameras.main.scrollY + this.cam_speed.current)
+
+		let centerY = this.cameras.main.scrollY + 0.5*this.cameras.main.height;
+
+		if (this.player.y >= centerY) {
+			this.cameras.main.setScroll(
+				0,
+				this.player.y - 0.5*this.cameras.main.height
+			)
+		}
 	}
 
 	setCamSpeed(speed) {
