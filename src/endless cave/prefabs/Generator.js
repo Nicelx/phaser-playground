@@ -25,6 +25,33 @@ class Generator{
 		this.scrollFloor();
 	}
 
+	createRoomLayer() {
+		let walls = this.generateWalls();
+
+		walls = this.createWalls(walls);
+
+		this.layers.walls = this.layers.walls.concat(walls);
+	}
+
+	generateWalls() {
+		let walls = [];
+
+		for (let ty = 0; ty< 1.5 * this.rows; ty++){
+			if (this.layers.walls.length + ty >= 5 &&  (ty+1) % 3 === 0) {
+				walls.push(this.generateWallRow())
+			}
+			else {
+				walls.push(this.generateEmptyRow(ty))
+			}
+		}
+		return walls;
+	}
+
+	createWalls(walls) {
+
+	}
+
+
 	createFloor() {
 		let x;
 		let y;
