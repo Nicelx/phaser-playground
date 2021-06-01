@@ -19,6 +19,7 @@ class Generator{
 	}
 	setup() {
 		this.createFloor();
+		this.createRoomLayer();
 	}
 
 	update() {
@@ -47,8 +48,110 @@ class Generator{
 		return walls;
 	}
 
-	createWalls(walls) {
+	generateEmptyRow() {
+		let row = [];
 
+		for (let tx = 0; tx < this.cols; tx++) {
+			row.push({
+				tx: tx,
+				is_wall: false
+			})
+		}
+		return row;
+	}
+
+	generateWallRow() {
+		let gaps = [];
+
+		for (let i = 0; i< this.helper.getRandInt(1,2); i++) {
+			gaps.push({
+				idx: i,
+				width: 2,
+			})
+		}
+
+		let min = 1;
+		let max = this.cols - gaps[0].width - 1;
+
+		let tx = this.helper.getRandItn(min, max);
+
+		gaps[0] = this.buildGap(tx, gaps[0].width);
+
+		if (gaps[1]) {
+			tx = this.helper.getRandItn(min, max);
+
+			while (gaps[0].taken.indexOf(tx) >= 0) {
+				tx = this.helper.getRandItn(min, max);
+			}
+
+			gaps[1] = this.buildGap(tx, gaps[1].width);
+		}
+
+		return this.buildRow(gaps);
+	}
+
+	buildGap(tx, width) {
+		let gap = {
+			tx: tx,
+			width: width
+		}
+
+		gap.empty = []
+
+		for (let i = 0; i< width; i++) {
+			gap.empty.push(tx + i);
+		}
+
+		gap.taken = []
+
+		for (let i = -2; i< width + 2; i++) {
+			gap.taken.push(tx + i);
+		}
+
+		return gap;
+	}
+
+	buildRow(gaps) {
+		let row = [];
+
+		for (let tx = 0; tx< this.cols; tx++){
+			row.push({
+				tx : tx,
+				frame : this.frames.walls,
+				is_wall : true
+			})
+		}
+
+		gaps.forEach( el => {
+			for (let tx = el.tx; tx< el.tx + el.width; tx++) {
+				if (row[tx]) {
+					row[tx].is_wall = false;
+				}
+			}
+		}, this)
+		return row;
+	}
+
+	createWalls(walls) {
+		let x,y,spr;
+
+		for (let ty = 0; ty < walls.length; ty++) {
+			for (let tx = 0; tx < walls[ty].length; tx++) {
+				x = (tx * this.CONFIG.tile) + this.CONFIG.map_offset;
+				y = (ty + this.layers.walls.length) * this.CONFIG.tile;
+
+				if (walls[ty][tx].is_wall) {
+					spr = this.ctx.add.sprite(x,y,'tileset', 11)
+					spr.setOrigin(0);
+					spr.setDepth(this.DEPTH.wall);
+					spr.setFrame(walls[ty][tx].frame);
+
+					walls[ty][tx].spr = spr;
+				}				
+			}
+		}
+
+		return walls;
 	}
 
 
@@ -71,7 +174,7 @@ class Generator{
 				
 				
 
-				spr = this.ctx.add.sprite(x, y, 'tileset');
+				spr = this.ctx.add.sprite(x, y, 'tileset', 12);
 
 				spr.setOrigin(0);
 				spr.setDepth(this.DEPTH.floor);
@@ -112,7 +215,7 @@ class Generator{
 		for (let tx = 0; tx < this.cols; tx++) {
 			x = (tx * this.CONFIG.tile) + this.CONFIG.map_offset;
 
-			spr = this.ctx.add.sprite(x,y,'tileset');
+			spr = this.ctx.add.sprite(x,y,'tileset', 12);
 			spr.setOrigin(0);
 			spr.setDepth(this.DEPTH.floor);
 
