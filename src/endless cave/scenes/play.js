@@ -13,7 +13,7 @@ class Play extends Phaser.Scene {
 			ui : 2,
 		}
 
-		this.generator = new Generator(this)
+		this.generator = new Generator(this, helper)
 
 		this.allow_input = false;
 		this.is_pause = false;
@@ -58,7 +58,7 @@ class Play extends Phaser.Scene {
 		this.player = new Player(
 			this,
 			this.CONFIG.centerX,
-			this.CONFIG.centerY,
+			0.5 * this.CONFIG.tile,
 			'spr-hero'
 		)
 

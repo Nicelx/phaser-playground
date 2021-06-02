@@ -79,8 +79,8 @@ class Entity {
 	createShadow() {
 		this.shadow = this.ctx.add.graphics({x : this.x, y : this.y})
 
-		let alpha = 0.2;
-		let radius = 32;
+		let alpha = 0.1;
+		let radius = 28;
 
 		this.shadow.fillStyle('0x000000', alpha);
 		this.shadow.fillCircle(0,0, radius)

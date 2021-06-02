@@ -1,9 +1,11 @@
-class Generator{
-	constructor(ctx) {
+class Generator {
+	constructor(ctx, helper) {
 		this.CONFIG = ctx.CONFIG;
 		this.DEPTH = ctx.DEPTH;
 
 		this.ctx = ctx;
+
+		this.helper = helper;
 
 		this.cols = 11;
 		this.rows = 20;
@@ -73,15 +75,15 @@ class Generator{
 		let min = 1;
 		let max = this.cols - gaps[0].width - 1;
 
-		let tx = this.helper.getRandItn(min, max);
+		let tx = this.helper.getRandInt(min, max);
 
 		gaps[0] = this.buildGap(tx, gaps[0].width);
 
 		if (gaps[1]) {
-			tx = this.helper.getRandItn(min, max);
+			tx = this.helper.getRandInt(min, max);
 
 			while (gaps[0].taken.indexOf(tx) >= 0) {
-				tx = this.helper.getRandItn(min, max);
+				tx = this.helper.getRandInt(min, max);
 			}
 
 			gaps[1] = this.buildGap(tx, gaps[1].width);
@@ -117,7 +119,7 @@ class Generator{
 		for (let tx = 0; tx< this.cols; tx++){
 			row.push({
 				tx : tx,
-				frame : this.frames.walls,
+				frame :11,
 				is_wall : true
 			})
 		}
@@ -141,7 +143,7 @@ class Generator{
 				y = (ty + this.layers.walls.length) * this.CONFIG.tile;
 
 				if (walls[ty][tx].is_wall) {
-					spr = this.ctx.add.sprite(x,y,'tileset', 11)
+					spr = this.ctx.add.sprite(x,y,'tileset' )
 					spr.setOrigin(0);
 					spr.setDepth(this.DEPTH.wall);
 					spr.setFrame(walls[ty][tx].frame);

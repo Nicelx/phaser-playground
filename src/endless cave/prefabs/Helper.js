@@ -7,3 +7,5 @@ class Helper {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 }
+
+const helper = new Helper();
