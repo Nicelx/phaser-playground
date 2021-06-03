@@ -9,8 +9,15 @@ class Play extends Phaser.Scene {
 
 		this.DEPTH = {
 			floor:0, 
-			player: 1,
-			ui : 2,
+			wall : 1,
+			pickup: 2,
+			monster : 3,
+
+			player : 4,
+
+			overlay: 5,
+			ui: 6,
+			menu: 7
 		}
 
 		this.generator = new Generator(this, helper)

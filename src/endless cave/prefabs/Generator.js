@@ -18,6 +18,16 @@ class Generator {
 			turrets: [],
 			overlay: false
 		}
+
+		this.frames = {
+			floor : 12,
+			walls: 11,
+		}
+
+		this.ty_offset = 0;
+		this.px_offset = 0;
+
+		this.height = 0;
 	}
 	setup() {
 		this.createFloor();
@@ -25,6 +35,7 @@ class Generator {
 	}
 
 	update() {
+		this.checkNewRoom();
 		this.scrollFloor();
 	}
 
@@ -34,6 +45,37 @@ class Generator {
 		walls = this.createWalls(walls);
 
 		this.layers.walls = this.layers.walls.concat(walls);
+
+		this.saveHeight();
+	}
+
+	checkNewRoom() {
+		if (this.ctx.cameras.main.scrollY + this.ctx.cameras.main.height < this.height) {
+			return
+		}
+
+		this.ty_offset =Math.floor(this.ctx.cameras.main.scrollY / this.CONFIG.tile);
+		this.px_offset = this.ctx.cameras.main.scrollY;
+
+		this.destroyPassedRows();
+
+		this.createRoomLayer();
+	}
+
+	destroyPassedRows() {
+		let row_num = Math.floor(this.px_offset / this.CONFIG.tile)
+
+		for (let ty = 0; ty < row_num; ty++) {
+			for (let tx = 0; tx<this.cols; tx++) {
+				if (this.layers.walls[ty][tx].spr) {
+					this.layers.walls[ty][tx].spr.destroy();
+				}
+			}
+		}
+	}
+
+	saveHeight() {
+		this.height = this.layers.walls.length * this.CONFIG.tile;
 	}
 
 	generateWalls() {
@@ -119,7 +161,7 @@ class Generator {
 		for (let tx = 0; tx< this.cols; tx++){
 			row.push({
 				tx : tx,
-				frame :11,
+				frame :this.frames.walls,
 				is_wall : true
 			})
 		}
