@@ -3,7 +3,7 @@ class Entity {
 		this.MAP_OFFSET = ctx.CONFIG.map_offset;
 		this.TILE_SIZE = ctx.CONFIG.tile;
 
-		// this.helper = new Helper();
+		this.helper = new Helper();
 
 		this.ctx = ctx;
 
@@ -173,4 +173,96 @@ class Entity {
 			this.states[key] = false;
 		}
 	}
+
+
+	getLeftX() {
+		return this.x - 0.5 * this.width;
+	}
+
+	getRightX() {
+		return this.x + 0.5*this.width;
+	}
+
+	getBottomY() {
+		return this.y + 0.5*this.height;
+	}
+	getTopY() {
+		return this.y - 0.5*this.height;
+	}
+
+	getCenter() {
+		return {
+			x : this.x,
+			y : this.y
+		}
+	}
+
+	getTilePos() {
+		return {
+			tx : this.tx,
+			ty: this.ty
+		}	
+	}
+
+	getTopLeftTile() {
+		let x = this.getLeftX() - this.MAP_OFFSET;
+		let y = this.getTopY();
+
+		let tx = Math.floor(x / this.TILE_SIZE);
+		let ty = Math.floor(y / this.TILE_SIZE);
+
+		return {
+			tx: tx,
+			ty: ty
+		}
+	
+	}
+
+	getBottomLeftTile() {
+		let x = this.getLeftX() - this.MAP_OFFSET;
+		let y = this.getBottomY();
+
+		y--;
+
+		let tx = Math.floor(x / this.TILE_SIZE);
+		let ty = Math.floor(y / this.TILE_SIZE);
+
+		return {
+			tx: tx,
+			ty: ty
+		}
+	}
+
+	getBottomRightTile() {
+		let x = this.getRightX() - this.MAP_OFFSET;
+		let y = this.getBottomY();
+
+		x--;
+		y--;
+
+		let tx = Math.floor(x / this.TILE_SIZE);
+		let ty = Math.floor(y / this.TILE_SIZE);
+
+		return {
+			tx: tx,
+			ty: ty
+		}
+	}
+
+	getTopRightTile() {
+		let x = this.getRightX() - this.MAP_OFFSET;
+		let y = this.getTopY();
+
+		x--;
+
+		let tx = Math.floor(x / this.TILE_SIZE);
+		let ty = Math.floor(y / this.TILE_SIZE);
+
+		return {
+			tx: tx,
+			ty: ty
+		}
+	}
+
+
 }

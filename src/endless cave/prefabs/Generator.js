@@ -266,4 +266,22 @@ class Generator {
 			this.layers.floor[ty][tx] = spr;
 		}		
 	}
+
+	checkTileBlocked(tx, ty) {
+		if (typeof tx === 'object') {
+			ty = tx.ty;
+			tx = tx.tx;
+		}
+
+		if (typeof this.layers.walls[ty] === 'undefined') {
+			return true;
+		}
+		else if (typeof this.layers.walls[ty][tx] === 'undefined') {
+			return true;
+		}
+		else {
+			return this.layers.walls[ty][tx].is_wall;
+		}
+	}
+
 }
