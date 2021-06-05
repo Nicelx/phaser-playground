@@ -20,6 +20,7 @@ class Play extends Phaser.Scene {
 			menu: 7
 		}
 
+		this.helper = new Helper();
 		this.generator = new Generator(this, helper)
 
 		this.allow_input = false;
@@ -47,6 +48,8 @@ class Play extends Phaser.Scene {
 
 		this.createControls();
 
+		this.createUi();
+
 		this.allow_input = true;
 		this.is_pause = false;
 		this.is_gameover = false;
@@ -58,14 +61,24 @@ class Play extends Phaser.Scene {
 		this.generator.update();
 
 		this.player.update(this.is_holding.direction);
+
+		if (this.player.states.dead) {
+			this.triggerGameOver();
+			return	
+		}
 	}
 
 
 	createPlayer() {
+		let center = this.helper.getTileCenter(
+			5,1,this.CONFIG.tile
+		)
+
+
 		this.player = new Player(
 			this,
-			this.CONFIG.centerX,
-			0.5 * this.CONFIG.tile,
+			center.x,
+			center.y,
 			'spr-hero'
 		)
 
@@ -73,6 +86,18 @@ class Play extends Phaser.Scene {
 
 		this.player.startMoving();
 
+	}
+
+	triggerGameOver() {
+		if (this.is_gameover) return;
+
+		this.is_gameover = true;
+
+		this.time.addEvent({
+			delay: 1500,
+			callback: this.goMenu,
+			callbackScope : this
+		})
 	}
 
 	updateCamera() {
@@ -170,6 +195,18 @@ class Play extends Phaser.Scene {
 		else {
 			this.is_holding.direction = false
 		}
+	}
+
+	createUi() {
+		this.bg_top = this.add.graphics({x:0, y:0});
+		this.bg_top.fillStyle('0x302c20', 1);
+		this.bg_top.fillRect(0,-10,this.CONFIG.width, this.CONFIG.tile);
+		this.bg_top.setDepth(this.DEPTH.ui);
+		this.bg_top.setScrollFactor(0);
+	}
+
+	goMenu() {
+		this.scene.start('Menu');	
 	}
 
 }

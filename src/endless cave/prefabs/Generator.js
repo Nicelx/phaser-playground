@@ -32,6 +32,8 @@ class Generator {
 	setup() {
 		this.createFloor();
 		this.createRoomLayer();
+
+		this.drawOverlay();
 	}
 
 	update() {
@@ -282,6 +284,30 @@ class Generator {
 		else {
 			return this.layers.walls[ty][tx].is_wall;
 		}
+	}
+
+	drawOverlay() {
+		let x,y;
+		let ty = 0;
+		let depth = this.DEPTH.overlay;
+		let overlay = [];
+
+		for (let tx = 0; tx< this.cols + 2; tx++) {
+			x = tx* this.CONFIG.tile - this.CONFIG.tile + 1;
+			y = ty * this.CONFIG.tile + 8;
+
+			let spr = this.ctx.add.sprite(x,y,'tileset');
+
+			spr.setFrame(9);
+			spr.setOrigin(0)
+			spr.setDepth(depth)
+			spr.setScrollFactor(0);
+
+			overlay.push(spr)
+
+		}
+
+		this.layers.overlay = overlay;
 	}
 
 }

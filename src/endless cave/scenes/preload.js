@@ -21,13 +21,13 @@ class Preload extends Phaser.Scene {
 		this.load.spritesheet('tileset', 'sprites.png', {
 			frameWidth: 32,
 			frameHeight: 32,
-			startFrame: 10,
+			startFrame: 9,
 			endFrame: 10
 		});
 		
 		this.load.spritesheet("spr-hero", "sprites.png", {
 			start: 0,
-			endFrame: 7,
+			endFrame: 8,
 			frameWidth: 32,
 			frameHeight: 32
 		});
@@ -98,11 +98,20 @@ class Preload extends Phaser.Scene {
 		this.anims.create({
 			key: 'spr-hero-walk',
 			frames : this.anims.generateFrameNames('spr-hero', { 
-				frames: [0,1,0,2]	
+				frames: [0,1,2,3]	
 			}),
 			repeat: -1,
 			frameRate : 12
 		})
+		// this.anims.create({
+		// 	key: 'spr-hero-dead',
+		// 	frames : this.anims.generateFrameNames('spr-hero', { 
+		// 		// frames: [0,1,0,2]	
+		// 		frames: [8,9,10]	
+		// 	}),
+		// 	repeat: -1,
+		// 	frameRate : 12
+		// })
 
 		this.anims.create({
 			key: 'spr-slime-walk',

@@ -105,11 +105,16 @@ class Entity {
 				this.startWalkAnim();
 				break;
 			case 'dead' :
+				this.startDeadAnim();
+				break;
 			case 'hurt' :
 				this.startHurtAnim();
 				break;
 			default : console.log('wrong key')
 		}
+	}
+	startDeadAnim() {
+		this.spr.setFrame(8)
 	}
 
 	startIdleAnim() {

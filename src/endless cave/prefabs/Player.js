@@ -18,7 +18,27 @@ class Player extends Entity {
 			this.updateSpriteDirection();
 			this.moveSprite();
 		}
+
+		this.checkScrollDeath();
 	}
+
+	checkScrollDeath() {
+		if (this.states.dead) return;
+
+		if (this.getTopY() <= Math.round(this.ctx.cameras.main.scrollY + 0.75 * this.TILE_SIZE)) {
+			this.die();
+		}
+	}
+
+	die() {
+		if (this.states.dead) return
+
+		this.health.current = 0;
+
+		this.setState('dead');
+		this.startNewAnim('dead');
+	}
+
 
 	startMoving() {
 		this.setState("walk");
