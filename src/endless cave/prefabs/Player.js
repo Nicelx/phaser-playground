@@ -7,6 +7,8 @@ class Player extends Entity {
 			current: 2,
 			max: 6,
 		};
+
+		this.setHealth(3,3);
 	}
 
 	update(is_holding) {

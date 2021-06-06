@@ -44,6 +44,8 @@ class Entity {
 			max : 0,
 		}
 
+		this.setTilePos();
+
 		this.createShadow();
 
 		this.createSprite();
@@ -150,7 +152,19 @@ class Entity {
 			this.shadow.setX(this.x);
 			this.shadow.setY(this.y);
 		}
+
+		this.setTilePos();
 	}	
+
+	setTilePos() {
+		let tile = this.helper.convertPxToTile(
+			this.x, this.y, this.TILE_SIZE
+		);
+
+		this.tx = tile.tx;
+		this.ty = tile.ty;
+	}
+
 
 	setDepth(depth) {
 		this.depth = depth;
@@ -177,6 +191,15 @@ class Entity {
 		for (let key in this.states) {
 			this.states[key] = false;
 		}
+	}
+
+
+	setHealth(current, total) {
+		if (typeof total ==='number') {
+			this.health.total = total;
+		}
+
+		this.health.current = Math.min(current, this.health.total)
 	}
 
 

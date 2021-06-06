@@ -29,6 +29,9 @@ class Text {
 			case 'preload':
 				style.fontSize = 48;
 				break;
+
+			case 'score' : 
+				style.fontSize = 32;
 		}
 		return style
 	}
