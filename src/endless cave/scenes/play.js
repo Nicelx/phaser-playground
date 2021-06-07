@@ -181,13 +181,13 @@ class Play extends Phaser.Scene {
 		this.bg_top = this.createUiBar(0, 0);
 		this.bg_bot = this.createUiBar(0, this.CONFIG.height - this.CONFIG.tile);
 
-		// this.btn_pause = new Button(
-		// 	this, 32,32,'ui', this.clickPause
-		// )
+		this.btn_pause = new Button(
+			this, 32,32,'ui', this.clickPause
+		)
 
-		this.btn_pause = this.add.sprite(32,32,'ui',1)
-		this.btn_pause.setDepth(this.DEPTH.menu);
+		// this.btn_pause = this.add.sprite(32,32,'ui',1)
 		this.btn_pause.setFrame(1);
+		this.btn_pause.setDepth(this.DEPTH.menu);
 		this.btn_pause.setScrollFactor(0);
 
 
