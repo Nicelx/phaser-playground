@@ -47,6 +47,7 @@ class Play extends Phaser.Scene {
 		this.createControls();
 
 		this.createUi();
+		this.createPauseScreen();
 
 		this.allow_input = true;
 		this.is_pause = false;
@@ -99,6 +100,8 @@ class Play extends Phaser.Scene {
 		if (this.player.y >= centerY) {
 			this.cameras.main.setScroll(0, this.player.y - 0.5 * this.cameras.main.height);
 		}
+
+		
 	}
 
 	setCamSpeed(speed) {
@@ -261,8 +264,54 @@ class Play extends Phaser.Scene {
 	}
 
 
-	clickPause() {
+	createPauseScreen() {
+		this.veil = this.add.graphics({x:0, y:0})
+		this.veil.fillStyle('0x000000', 0.3);
+		this.veil.fillRect(0,0, this.CONFIG.width, this.CONFIG.height);
+		this.veil.setDepth(this.DEPTH.ui);
+		this.veil.setScrollFactor(0);
 
+		this.txt_pause = new Text(
+			this, this.CONFIG.centerX, this.CONFIG.centerY - 32, 'Pause', 'title'
+		);
+		this.txt_pause.setDepth(this.DEPTH.ui);
+		this.txt_pause.setScrollFactor(0);
+
+		this.togglePauseScreen(false);
+	}
+
+	togglePauseScreen(is_visible) {
+		this.veil.setVisible(is_visible);
+		this.txt_pause.setVisible(is_visible);
+	}
+
+	clickPause() {
+		if (!this.allow_input) return
+		if (this.is_gameover) return
+
+		this.is_pause = !this.is_pause;
+		this.togglePauseScreen(this.is_pause);
+
+		if (this.is_pause) {
+			this.startPause();
+		}
+		else {
+			this.endPause();
+		}
+	}
+
+	startPause() {
+		if (this.player.states.walk) {
+			this.player.stopMoving();
+			this.cam_speed.current = 0;
+		}
+	}
+
+	endPause() {
+		if (this.player.states.idle) {
+			this.player.startMoving();
+			this.cam_speed.current = 1;
+		}
 	}
 
 	goMenu() {

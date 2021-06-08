@@ -99,6 +99,29 @@ class Text {
 	setScrollFactor(scrollX, scrollY){
 		this.obj.setScrollFactor(scrollX, scrollY)
 	};
+
+	setVisible(is_visible) {
+		this.obj.setVisible(is_visible);
+	}
+	setAlpha(alpha) {
+		this.alpha = alpha;
+		this.obj.setAlpha(alpha);
+	}
+	setFontSize(size) {
+		this.style.fontSize = size;
+		this.obj.setFontSize(size);
+
+		this.width = this.obj.width;
+		this.height = this.obj.height;
+	}
+	setCenterAlign() {
+		this.style.align = 'center';
+		this.obj.setCenterAlign();
+	}
+
+
+
+
 	getCenter() {
 		return this.obj.getCenter();
 	}
