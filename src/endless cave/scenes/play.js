@@ -87,9 +87,35 @@ class Play extends Phaser.Scene {
 
 		this.time.addEvent({
 			delay: 1500,
-			callback: this.goMenu,
+			callback: this.showGameOver,
 			callbackScope: this,
 		});
+	}
+
+	showGameOver() {
+		this.btn_pause.setVisible(false);
+		this.txt_score.setVisible(false);
+		this.arr_hearts.forEach(el => {
+			el.setVisible(false);
+		}, this)
+		this.scene.launch('GameOver', {score: this.score});
+		let panel = this.scene.get('GameOver');
+
+		panel.events.on('clickMenu', this.handleGoMenu, this);
+		panel.events.on('clickTryAgain', this.handleTryAgain, this);
+	}
+
+	closeGameOver() {
+		this.scene.stop('GameOver')
+	}
+
+	handleGoMenu() {
+		this.closeGameOver();
+		this.goMenu();
+	}
+	handleTryAgain() {
+		this.closeGameOver();
+		this.restartGame();
 	}
 
 	updateCamera() {
@@ -316,5 +342,9 @@ class Play extends Phaser.Scene {
 
 	goMenu() {
 		this.scene.start("Menu");
+	}
+
+	restartGame() {
+		this.scene.restart();
 	}
 }

@@ -14,6 +14,7 @@ App.prototype.start = function() {
 	scenes.push(Preload)
 	scenes.push(Menu)
 	scenes.push(Play)
+	scenes.push(GameOver)
 
 	const config = {
 		type : Phaser.AUTO,
