@@ -12,17 +12,17 @@ class Generator {
 
 		this.layers = {
 			floor: [],
-			walls:[],
+			walls: [],
 			monsters: [],
 			pickups: [],
 			turrets: [],
-			overlay: false
-		}
+			overlay: false,
+		};
 
 		this.frames = {
-			floor : 12,
+			floor: 12,
 			walls: 11,
-		}
+		};
 
 		this.ty_offset = 0;
 		this.px_offset = 0;
@@ -48,15 +48,20 @@ class Generator {
 
 		this.layers.walls = this.layers.walls.concat(walls);
 
+		let monsters = this.generateMonsters();
+
+		monsters = this.createMonsters(monsters);
+		this.layers.monsters = this.layers.monsters.concat(monsters);
+
 		this.saveHeight();
 	}
 
 	checkNewRoom() {
 		if (this.ctx.cameras.main.scrollY + this.ctx.cameras.main.height < this.height) {
-			return
+			return;
 		}
 
-		this.ty_offset =Math.floor(this.ctx.cameras.main.scrollY / this.CONFIG.tile);
+		this.ty_offset = Math.floor(this.ctx.cameras.main.scrollY / this.CONFIG.tile);
 		this.px_offset = this.ctx.cameras.main.scrollY;
 
 		this.destroyPassedRows();
@@ -65,13 +70,20 @@ class Generator {
 	}
 
 	destroyPassedRows() {
-		let row_num = Math.floor(this.px_offset / this.CONFIG.tile)
+		let row_num = Math.floor(this.px_offset / this.CONFIG.tile);
 
 		for (let ty = 0; ty < row_num; ty++) {
-			for (let tx = 0; tx<this.cols; tx++) {
+			for (let tx = 0; tx < this.cols; tx++) {
 				if (this.layers.walls[ty][tx].spr) {
 					this.layers.walls[ty][tx].spr.destroy();
 				}
+			}
+		}
+
+		for (let i = this.layers.monsters.length - 1; i >= 0; i--) {
+			if (this.layers.monsters[i].y <= this.ctx.cameras.main.scrollY) {
+				this.layers.monsters[i].destroy();
+				this.layers.monsters.splice(i, 1);
 			}
 		}
 	}
@@ -83,12 +95,11 @@ class Generator {
 	generateWalls() {
 		let walls = [];
 
-		for (let ty = 0; ty< 1.5 * this.rows; ty++){
-			if (this.layers.walls.length + ty >= 5 &&  (ty+1) % 3 === 0) {
-				walls.push(this.generateWallRow())
-			}
-			else {
-				walls.push(this.generateEmptyRow(ty))
+		for (let ty = 0; ty < 1.5 * this.rows; ty++) {
+			if (this.layers.walls.length + ty >= 5 && (ty + 1) % 3 === 0) {
+				walls.push(this.generateWallRow());
+			} else {
+				walls.push(this.generateEmptyRow(ty));
 			}
 		}
 		return walls;
@@ -100,8 +111,8 @@ class Generator {
 		for (let tx = 0; tx < this.cols; tx++) {
 			row.push({
 				tx: tx,
-				is_wall: false
-			})
+				is_wall: false,
+			});
 		}
 		return row;
 	}
@@ -109,11 +120,11 @@ class Generator {
 	generateWallRow() {
 		let gaps = [];
 
-		for (let i = 0; i< this.helper.getRandInt(1,2); i++) {
+		for (let i = 0; i < this.helper.getRandInt(1, 2); i++) {
 			gaps.push({
 				idx: i,
 				width: 2,
-			})
+			});
 		}
 
 		let min = 1;
@@ -139,18 +150,18 @@ class Generator {
 	buildGap(tx, width) {
 		let gap = {
 			tx: tx,
-			width: width
-		}
+			width: width,
+		};
 
-		gap.empty = []
+		gap.empty = [];
 
-		for (let i = 0; i< width; i++) {
+		for (let i = 0; i < width; i++) {
 			gap.empty.push(tx + i);
 		}
 
-		gap.taken = []
+		gap.taken = [];
 
-		for (let i = -2; i< width + 2; i++) {
+		for (let i = -2; i < width + 2; i++) {
 			gap.taken.push(tx + i);
 		}
 
@@ -160,46 +171,45 @@ class Generator {
 	buildRow(gaps) {
 		let row = [];
 
-		for (let tx = 0; tx< this.cols; tx++){
+		for (let tx = 0; tx < this.cols; tx++) {
 			row.push({
-				tx : tx,
-				frame :this.frames.walls,
-				is_wall : true
-			})
+				tx: tx,
+				frame: this.frames.walls,
+				is_wall: true,
+			});
 		}
 
-		gaps.forEach( el => {
-			for (let tx = el.tx; tx< el.tx + el.width; tx++) {
+		gaps.forEach((el) => {
+			for (let tx = el.tx; tx < el.tx + el.width; tx++) {
 				if (row[tx]) {
 					row[tx].is_wall = false;
 				}
 			}
-		}, this)
+		}, this);
 		return row;
 	}
 
 	createWalls(walls) {
-		let x,y,spr;
+		let x, y, spr;
 
 		for (let ty = 0; ty < walls.length; ty++) {
 			for (let tx = 0; tx < walls[ty].length; tx++) {
-				x = (tx * this.CONFIG.tile) + this.CONFIG.map_offset;
+				x = tx * this.CONFIG.tile + this.CONFIG.map_offset;
 				y = (ty + this.layers.walls.length) * this.CONFIG.tile;
 
 				if (walls[ty][tx].is_wall) {
-					spr = this.ctx.add.sprite(x,y,'tileset' )
+					spr = this.ctx.add.sprite(x, y, "tileset");
 					spr.setOrigin(0);
 					spr.setDepth(this.DEPTH.wall);
 					spr.setFrame(walls[ty][tx].frame);
 
 					walls[ty][tx].spr = spr;
-				}				
+				}
 			}
 		}
 
 		return walls;
 	}
-
 
 	createFloor() {
 		let x;
@@ -211,16 +221,14 @@ class Generator {
 
 		let floor = [];
 
-		for (let ty = 0; ty< rows; ty++) {
+		for (let ty = 0; ty < rows; ty++) {
 			floor[ty] = [];
 
 			for (let tx = 0; tx < cols; tx++) {
-				x = (tx * this.CONFIG.tile )+ this.CONFIG.map_offset;
-				y = (ty * this.CONFIG.tile);
-				
-				
+				x = tx * this.CONFIG.tile + this.CONFIG.map_offset;
+				y = ty * this.CONFIG.tile;
 
-				spr = this.ctx.add.sprite(x, y, 'tileset', 12);
+				spr = this.ctx.add.sprite(x, y, "tileset", 12);
 
 				spr.setOrigin(0);
 				spr.setDepth(this.DEPTH.floor);
@@ -236,7 +244,7 @@ class Generator {
 		let offset = this.ctx.cameras.main.scrollY - this.layers.floor[0][0].y;
 
 		if (offset >= this.CONFIG.tile) {
-			this.destroyFloorRow()
+			this.destroyFloorRow();
 			this.appendFloorRow();
 		}
 	}
@@ -246,7 +254,7 @@ class Generator {
 			this.layers.floor[0][tx].destroy();
 		}
 
-		this.layers.floor.splice(0,1);
+		this.layers.floor.splice(0, 1);
 	}
 
 	appendFloorRow() {
@@ -254,60 +262,117 @@ class Generator {
 		let spr;
 
 		let ty = this.layers.floor.length;
-		let y = this.layers.floor[ty -1][0].y + this.CONFIG.tile;
+		let y = this.layers.floor[ty - 1][0].y + this.CONFIG.tile;
 
-		this.layers.floor.push([])
+		this.layers.floor.push([]);
 
 		for (let tx = 0; tx < this.cols; tx++) {
-			x = (tx * this.CONFIG.tile) + this.CONFIG.map_offset;
+			x = tx * this.CONFIG.tile + this.CONFIG.map_offset;
 
-			spr = this.ctx.add.sprite(x,y,'tileset', 12);
+			spr = this.ctx.add.sprite(x, y, "tileset", 12);
 			spr.setOrigin(0);
 			spr.setDepth(this.DEPTH.floor);
 
 			this.layers.floor[ty][tx] = spr;
-		}		
+		}
 	}
 
 	checkTileBlocked(tx, ty) {
-		if (typeof tx === 'object') {
+		if (typeof tx === "object") {
 			ty = tx.ty;
 			tx = tx.tx;
 		}
 
-		if (typeof this.layers.walls[ty] === 'undefined') {
+		if (typeof this.layers.walls[ty] === "undefined") {
 			return true;
-		}
-		else if (typeof this.layers.walls[ty][tx] === 'undefined') {
+		} else if (typeof this.layers.walls[ty][tx] === "undefined") {
 			return true;
-		}
-		else {
+		} else {
 			return this.layers.walls[ty][tx].is_wall;
 		}
 	}
 
+	generateMonsters() {
+		let pos = this.getRandPosInRoom();
+
+		while (this.layers.walls[pos.row][pos.col].is_wall) {
+			pos = this.getRandPosInRoom();
+		}
+
+		let spawn = {
+			tx : pos.col,
+			ty : pos.row,
+			x : this.CONFIG.map_offset + ((pos.col + 0.5) * this.CONFIG.tile),
+			y : (pos.row + 0.5) * this.CONFIG.tile
+		}
+
+		return [{
+			spawn: spawn,
+			key : this.getMonsterKey()
+		}]
+	}
+
+	getMonsterKey() {
+		let keys = ['tileset', 'spr-hero'];
+		let idx = this.helper.getRandInt(0, keys.length - 1);
+
+		return keys[idx]
+	}
+
+	createMonsters(monsters) {
+		for (let i = 0; i< monsters.length; i++) {
+			monsters[i] = new Monster(
+				this.ctx, monsters[i].spawn.x, monsters[i].spawn.y, monsters[i].key
+			)
+
+			monsters[i].setDepth(this.DEPTH.monster);
+		}
+
+		return monsters;
+	}
+
 	drawOverlay() {
-		let x,y;
+		let x, y;
 		let ty = 0;
 		let depth = this.DEPTH.overlay;
 		let overlay = [];
 
-		for (let tx = 0; tx< this.cols + 2; tx++) {
-			x = tx* this.CONFIG.tile - this.CONFIG.tile + 1;
+		for (let tx = 0; tx < this.cols + 2; tx++) {
+			x = tx * this.CONFIG.tile - this.CONFIG.tile + 1;
 			y = ty * this.CONFIG.tile + 8;
 
-			let spr = this.ctx.add.sprite(x,y,'tileset');
+			let spr = this.ctx.add.sprite(x, y, "tileset");
 
 			spr.setFrame(9);
-			spr.setOrigin(0)
-			spr.setDepth(depth)
+			spr.setOrigin(0);
+			spr.setDepth(depth);
 			spr.setScrollFactor(0);
 
-			overlay.push(spr)
-
+			overlay.push(spr);
 		}
 
 		this.layers.overlay = overlay;
 	}
 
+	getRandPosInRoom() {
+		let min = {
+			col: 0,
+			row: Math.floor(
+				(this.ctx.cameras.main.scrollY + this.ctx.cameras.main.height) / this.CONFIG.tile
+			),
+		};
+
+		let max = {
+			col : this.cols - 1,
+			row: this.layers.walls.length - 1
+		}
+
+		let col = this.helper.getRandInt(min.col, max.col)
+		let row = this.helper.getRandInt(min.row, max.row);
+
+		return {
+			col : col,
+			row : row
+		}
+	}
 }
